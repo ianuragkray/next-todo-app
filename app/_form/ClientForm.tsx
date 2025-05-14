@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import Button from '@/component/Button';
 import Input from '@/component/Input';
 
@@ -13,6 +13,19 @@ const ClientForm = () => {
   const [tasks, setTasks] = useState<Task[]>([]);
   const [inputValue, setInputValue] = useState('');
   const [editId, setEditId] = useState<number | null>(null);
+
+  // Load tasks from localStorage on component mount
+  useEffect(() => {
+    const storedTasks = localStorage.getItem('tasks');
+    if (storedTasks) {
+      setTasks(JSON.parse(storedTasks));
+    }
+  }, []);
+
+  // Save tasks to localStorage whenever tasks change
+  useEffect(() => {
+    localStorage.setItem('tasks', JSON.stringify(tasks));
+  }, [tasks]);
 
   const handleSubmit = (event: React.FormEvent<HTMLFormElement>) => {
     event.preventDefault();
